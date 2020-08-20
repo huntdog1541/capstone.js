@@ -72,7 +72,7 @@ def compileCapstone(targets):
 
     # CMake
     cmd = 'cmake'
-    cmd += os.path.expandvars(' -DCMAKE_TOOLCHAIN_FILE=$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake')
+    cmd += os.path.expandvars(' -DCMAKE_TOOLCHAIN_FILE=/home/dwhunt/Dev/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake')
     cmd += ' -DCMAKE_BUILD_TYPE=Release'
     cmd += ' -DCMAKE_C_FLAGS=\"-Wno-warn-absolute-paths\"'
     cmd += ' -DCAPSTONE_BUILD_TESTS=OFF'
@@ -107,14 +107,14 @@ def compileCapstone(targets):
     methods = [
         'ccall', 'getValue', 'setValue', 'writeArrayToMemory', 'UTF8ToString'
     ]
-    cmd = os.path.expandvars('$EMSCRIPTEN/emcc')
+    cmd = os.path.expandvars('emcc')
     cmd += ' -Os --memory-init-file 0'
     cmd += ' capstone/libcapstone.a'
     cmd += ' -s EXPORTED_FUNCTIONS=\"[\''+ '\', \''.join(exports) +'\']\"'
     cmd += ' -s EXTRA_EXPORTED_RUNTIME_METHODS=\"[\''+ '\', \''.join(methods) +'\']\"'
     cmd += ' -s ALLOW_MEMORY_GROWTH=1'
     cmd += ' -s MODULARIZE=1'
-    cmd += ' -s WASM=0'
+    cmd += ' -s WASM=1'
     cmd += ' -s EXPORT_NAME="\'MCapstone\'"'
     if targets:
         cmd += ' -o src/libcapstone-%s.out.js' % '-'.join(targets).lower()
